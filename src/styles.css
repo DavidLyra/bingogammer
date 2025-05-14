@@ -1,0 +1,425 @@
+/* styles.css - Estilos para o BingoGammer */
+
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  /* Cores primárias */
+  --primary: #4F46E5;
+  --primary-light: #A5B4FC;
+  --primary-dark: #3730A3;
+  --secondary: #10B981;
+  --accent: #F59E0B;
+  --success: #10B981;
+  --danger: #EF4444;
+  
+  /* Cores do tema claro */
+  --light-bg: #F9FAFB;
+  --light-text: #1F2937;
+  --light-card: #FFFFFF;
+  --light-card-border: #E5E7EB;
+  --light-muted: #6B7280;
+  
+  /* Cores do tema escuro */
+  --dark-bg: #111827;
+  --dark-text: #F9FAFB;
+  --dark-card: #1F2937;
+  --dark-card-border: #374151;
+  --dark-muted: #9CA3AF;
+  
+  /* Variáveis do tema (serão alteradas via JS) */
+  --bg-color: var(--light-bg);
+  --text-color: var(--light-text);
+  --card-bg: var(--light-card);
+  --card-border: var(--light-card-border);
+  --muted-color: var(--light-muted);
+}
+
+/* Tema escuro */
+.dark-theme {
+  --bg-color: var(--dark-bg);
+  --text-color: var(--dark-text);
+  --card-bg: var(--dark-card);
+  --card-border: var(--dark-card-border);
+  --muted-color: var(--dark-muted);
+}
+
+/* Layout principal */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.content {
+  width: 100%;
+  max-width: 1024px;
+  padding: 0 1rem;
+}
+
+/* Cabeçalho */
+.header {
+  width: 100%;
+  max-width: 1024px;
+  padding: 1.5rem 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--primary);
+  margin: 0;
+  line-height: 1.2;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.tagline {
+  font-size: 1rem;
+  color: var(--muted-color);
+  margin-top: 0.25rem;
+}
+
+/* Botões */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  color: white;
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: white;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+  transform: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Cartão/Container */
+.card {
+  background-color: var(--card-bg);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--card-border);
+  transition: all 0.3s ease;
+}
+
+.card-header {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+}
+
+/* Cartela de Bingo */
+.bingo-card {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.bingo-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem;
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: var(--primary);
+}
+
+.bingo-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem;
+  font-weight: bold;
+  font-size: 1.125rem;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  margin: 0.25rem auto;
+  border: 2px solid;
+  transition: all 0.2s ease;
+}
+
+.bingo-cell.marked {
+  background-color: var(--accent);
+  color: #000000;
+  border-color: var(--accent);
+  animation: pulse 1.5s 1;
+}
+
+/* Números sorteados */
+.drawn-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.drawn-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  font-weight: bold;
+  background-color: var(--card-border);
+  color: var(--text-color);
+}
+
+.drawn-number.marked {
+  background-color: var(--accent);
+  color: #000000;
+}
+
+.last-drawn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 2rem;
+  background-color: var(--accent);
+  color: #000000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: pulse 1.5s infinite;
+}
+
+/* Status do jogo */
+.game-status {
+  background: linear-gradient(135deg, var(--card-bg) 0%, var(--light-theme ? '#F3F4F6' : '#374151') 100%);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--card-border);
+}
+
+.winner-alert {
+  background-color: var(--success);
+  color: white;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  margin-top: 1rem;
+  animation: slideDown 0.5s ease-out;
+}
+
+/* Outros jogadores */
+.player-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.player-card {
+  padding: 1rem;
+  border-radius: 0.375rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--card-border);
+  background-color: var(--card-bg);
+  transition: all 0.3s ease;
+}
+
+.player-card.winner {
+  background-color: var(--success);
+  color: white;
+  border: 1px solid var(--success);
+  animation: pulse 2s 1;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 0.5rem;
+  background-color: var(--card-border);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background-color: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.winner .progress-fill {
+  background-color: white;
+}
+
+/* Formulários */
+select, 
+button {
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--card-border);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  margin-left: 0.5rem;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+select:focus,
+button:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+/* Call to Action */
+.cta-container {
+  text-align: center;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: rgba(79, 70, 229, 0.1);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.dark-theme .cta-container {
+  background-color: rgba(79, 70, 229, 0.2);
+  border: 1px solid rgba(79, 70, 229, 0.4);
+}
+
+.cta-heading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.cta-text {
+  font-size: 1rem;
+  margin-bottom: 1.25rem;
+  color: var(--muted-color);
+}
+
+/* Footer */
+.footer {
+  margin-top: 2rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--card-border);
+  text-align: center;
+  width: 100%;
+  max-width: 1024px;
+  color: var(--muted-color);
+  font-size: 0.875rem;
+}
+
+/* Layout responsivo */
+.flex-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.flex-col {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Animações */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideDown {
+  0% { opacity: 0; transform: translateY(-1rem); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .header > div:last-child {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
+  
+  .bingo-cell {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1rem;
+  }
+}
