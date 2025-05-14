@@ -1,5 +1,7 @@
+// App.js
 import React from 'react';
-import './App.css';
+import './styles.css';
+import './index.css'; // Importamos ambos os CSS para garantir compatibilidade
 import BingoGame from './components/BingoGame';
 
 function App() {

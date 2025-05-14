@@ -1,4 +1,4 @@
-// BingoGame.js com design minimalista e atraente
+// BingoGame.js - Versão Responsiva
 import React, { useState, useEffect } from 'react';
 
 // Language translations
@@ -200,8 +200,23 @@ const BingoGame = () => {
   const [theme, setTheme] = useState('light');
   // Language selection (default: Portuguese)
   const [language, setLanguage] = useState('pt');
+  // State to detect mobile devices
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  // State to detect very small screens
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 480);
   // Get translations for current language
   const t = translations[language];
+
+  // Effect to detect screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsSmallScreen(window.innerWidth < 480);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Function to generate a random number between min and max
   const getRandomNumber = (min, max) => {
@@ -472,14 +487,14 @@ const BingoGame = () => {
         }
       };
 
-  // Custom CSS styles
+  // Custom CSS styles with responsiveness
   const styles = {
     container: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       minHeight: '100vh',
-      padding: '1rem',
+      padding: isMobile ? '0.5rem' : '1rem',
       backgroundColor: themeStyles.background,
       color: themeStyles.text,
       transition: 'all 0.3s ease'
@@ -487,19 +502,21 @@ const BingoGame = () => {
     header: {
       width: '100%',
       maxWidth: '1024px',
-      padding: '1rem 0',
-      marginBottom: '2rem',
+      padding: isMobile ? '0.5rem 0' : '1rem 0',
+      marginBottom: isMobile ? '1rem' : '2rem',
       borderBottom: `1px solid ${themeStyles.cardBorder}`,
       display: 'flex',
+      flexDirection: isMobile ? 'column' : 'row',
       justifyContent: 'space-between',
-      alignItems: 'center'
+      alignItems: isMobile ? 'flex-start' : 'center',
+      gap: isMobile ? '0.5rem' : '0'
     },
     content: {
       width: '100%',
       maxWidth: '1024px'
     },
     title: {
-      fontSize: '2.5rem',
+      fontSize: isMobile ? '1.75rem' : '2.5rem',
       fontWeight: 'bold',
       color: colors.primary,
       margin: 0,
@@ -516,19 +533,21 @@ const BingoGame = () => {
       border: `1px solid ${themeStyles.cardBorder}`,
       backgroundColor: themeStyles.card,
       color: themeStyles.text,
-      marginLeft: '0.5rem',
+      marginLeft: isMobile ? '0' : '0.5rem',
       outline: 'none',
       cursor: 'pointer',
-      transition: 'all 0.2s'
+      transition: 'all 0.2s',
+      fontSize: isMobile ? '0.875rem' : '1rem'
     },
     button: {
-      padding: '0.75rem 1.5rem',
+      padding: isMobile ? '0.5rem 1rem' : '0.75rem 1.5rem',
       borderRadius: '0.375rem',
       fontWeight: 'bold',
       border: 'none',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+      boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+      fontSize: isMobile ? '0.875rem' : '1rem'
     },
     primaryButton: {
       backgroundColor: themeStyles.button.primary,
@@ -549,7 +568,7 @@ const BingoGame = () => {
     card: {
       backgroundColor: themeStyles.card,
       borderRadius: '0.5rem',
-      padding: '1.5rem',
+      padding: isMobile ? '0.75rem' : '1.5rem',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
       marginBottom: '1.5rem',
       border: `1px solid ${themeStyles.cardBorder}`,
@@ -558,14 +577,14 @@ const BingoGame = () => {
     gameStatusCard: {
       background: `linear-gradient(135deg, ${themeStyles.card} 0%, ${theme === 'light' ? '#F3F4F6' : '#374151'} 100%)`,
       borderRadius: '0.5rem',
-      padding: '1.5rem',
+      padding: isMobile ? '0.75rem' : '1.5rem',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
       marginBottom: '1.5rem',
       border: `1px solid ${themeStyles.cardBorder}`,
       transition: 'all 0.3s ease'
     },
     cardHeader: {
-      fontSize: '1.25rem',
+      fontSize: isMobile ? '1rem' : '1.25rem',
       fontWeight: 'bold',
       marginBottom: '1rem',
       display: 'flex',
@@ -575,52 +594,54 @@ const BingoGame = () => {
     bingoCard: {
       display: 'grid',
       gridTemplateColumns: 'repeat(5, 1fr)',
-      gap: '0.5rem',
-      margin: '1rem 0'
+      gap: isMobile ? '0.125rem' : '0.5rem',
+      margin: isMobile ? '0.5rem 0' : '1rem 0',
+      width: '100%'
     },
     bingoHeader: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      padding: '0.75rem',
+      padding: isMobile ? '0.25rem' : '0.75rem',
       fontWeight: 'bold',
-      fontSize: '1.25rem',
+      fontSize: isMobile ? '0.875rem' : '1.25rem',
       color: colors.primary
     },
     bingoCell: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      padding: '0.75rem',
+      padding: isMobile ? '0' : '0.25rem',
       fontWeight: 'bold',
-      fontSize: '1.125rem',
+      fontSize: isSmallScreen ? 'calc(8vw - 8px)' : (isMobile ? '0.875rem' : '1.125rem'),
       borderRadius: '50%',
-      width: '3rem',
-      height: '3rem',
-      margin: '0.25rem auto',
-      border: '2px solid',
+      width: isSmallScreen ? 'calc(18vw - 4px)' : (isMobile ? '2.25rem' : '3rem'),
+      height: isSmallScreen ? 'calc(18vw - 4px)' : (isMobile ? '2.25rem' : '3rem'),
+      margin: isSmallScreen ? '1px' : (isMobile ? '0.125rem' : '0.25rem'),
+      border: isSmallScreen ? '1px solid' : '2px solid',
       transition: 'all 0.2s ease'
     },
     drawnNumber: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      width: '2.5rem',
-      height: '2.5rem',
+      width: isMobile ? '2rem' : '2.5rem',
+      height: isMobile ? '2rem' : '2.5rem',
       borderRadius: '50%',
       fontWeight: 'bold',
-      margin: '0.25rem'
+      margin: isMobile ? '0.125rem' : '0.25rem',
+      fontSize: isMobile ? '0.75rem' : '0.875rem'
     },
     lastDrawnNumber: {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      width: '5rem',
-      height: '5rem',
+      width: isMobile ? '4rem' : '5rem',
+      height: isMobile ? '4rem' : '5rem',
       borderRadius: '50%',
       fontWeight: 'bold',
-      fontSize: '2rem',
+      fontSize: isMobile ? '1.5rem' : '2rem',
       backgroundColor: themeStyles.highlight,
       color: '#000',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
@@ -635,9 +656,9 @@ const BingoGame = () => {
       animation: 'slideDown 0.5s ease-out'
     },
     playerCard: {
-      padding: '1rem',
+      padding: isMobile ? '0.75rem' : '1rem',
       borderRadius: '0.375rem',
-      marginBottom: '0.75rem',
+      marginBottom: isMobile ? '0.5rem' : '0.75rem',
       border: `1px solid ${themeStyles.cardBorder}`,
       backgroundColor: themeStyles.card,
       transition: 'all 0.3s ease'
@@ -672,23 +693,42 @@ const BingoGame = () => {
     },
     callToAction: {
       textAlign: 'center', 
-      marginTop: '1.5rem',
-      marginBottom: '2rem',
-      padding: '1.5rem',
+      marginTop: isMobile ? '0.75rem' : '1.5rem',
+      marginBottom: isMobile ? '1rem' : '2rem',
+      padding: isMobile ? '1rem' : '1.5rem',
       borderRadius: '0.5rem',
       backgroundColor: theme === 'light' ? 'rgba(79, 70, 229, 0.1)' : 'rgba(79, 70, 229, 0.2)',
       border: `1px solid ${theme === 'light' ? 'rgba(79, 70, 229, 0.2)' : 'rgba(79, 70, 229, 0.4)'}`,
     },
     ctaHeading: {
-      fontSize: '1.5rem',
+      fontSize: isMobile ? '1.25rem' : '1.5rem',
       fontWeight: 'bold',
       color: colors.primary,
       marginBottom: '0.5rem'
     },
     ctaText: {
-      fontSize: '1rem',
-      marginBottom: '1.25rem',
+      fontSize: isMobile ? '0.875rem' : '1rem',
+      marginBottom: isMobile ? '0.75rem' : '1.25rem',
       color: theme === 'light' ? '#4B5563' : '#D1D5DB'
+    },
+    controls: {
+      display: 'flex',
+      flexDirection: isMobile ? 'column' : 'row',
+      justifyContent: 'space-between',
+      alignItems: isMobile ? 'stretch' : 'center',
+      marginBottom: '1.5rem',
+      gap: isMobile ? '0.75rem' : '0'
+    },
+    controlButtons: {
+      display: 'flex',
+      gap: '0.5rem',
+      width: isMobile ? '100%' : 'auto'
+    },
+    controlOptions: {
+      display: 'flex',
+      flexDirection: isMobile ? 'column' : 'row',
+      alignItems: isMobile ? 'stretch' : 'center',
+      gap: isMobile ? '0.5rem' : '0.5rem'
     }
   };
 
@@ -715,7 +755,13 @@ const BingoGame = () => {
           <h1 style={styles.title}>{t.title}</h1>
           <p style={styles.tagline}>{t.tagline}</p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center',
+          width: isMobile ? '100%' : 'auto',
+          justifyContent: isMobile ? 'space-between' : 'flex-end',
+          marginTop: isMobile ? '0.5rem' : '0'
+        }}>
           <div>
             <label style={{ marginRight: '0.5rem' }}>{t.language}:</label>
             <select 
@@ -735,9 +781,10 @@ const BingoGame = () => {
             style={{
               ...styles.button,
               marginLeft: '1rem',
-              padding: '0.5rem 1rem',
+              padding: isMobile ? '0.375rem 0.75rem' : '0.5rem 1rem',
               backgroundColor: theme === 'light' ? '#1F2937' : '#F3F4F6',
-              color: theme === 'light' ? '#F3F4F6' : '#1F2937'
+              color: theme === 'light' ? '#F3F4F6' : '#1F2937',
+              fontSize: isMobile ? '0.75rem' : '0.875rem'
             }}
           >
             {theme === 'light' ? `🌙 ${t.darkMode}` : `☀️ ${t.lightMode}`}
@@ -754,15 +801,16 @@ const BingoGame = () => {
 
       <main style={styles.content}>
         {/* Game controls */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div style={styles.controls}>
+          <div style={styles.controlButtons}>
             <button 
               onClick={startGame} 
               disabled={gameRunning}
               style={{
                 ...styles.button,
                 ...styles.primaryButton,
-                ...(gameRunning ? styles.disabledButton : {})
+                ...(gameRunning ? styles.disabledButton : {}),
+                flex: isMobile ? '1' : 'initial'
               }}
             >
               {t.startGame}
@@ -773,60 +821,90 @@ const BingoGame = () => {
               style={{
                 ...styles.button,
                 ...styles.dangerButton,
-                ...(!gameRunning ? styles.disabledButton : {})
+                ...(!gameRunning ? styles.disabledButton : {}),
+                flex: isMobile ? '1' : 'initial'
               }}
             >
               {t.stopGame}
             </button>
           </div>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <label>{t.players}:</label>
-            <select 
-              value={playerCount} 
-              onChange={(e) => setPlayerCount(Number(e.target.value))}
-              style={styles.languageSelect}
-              disabled={gameRunning}
-            >
-              {[1, 2, 3, 5, 10, 20].map(count => (
-                <option key={count} value={count}>{count}</option>
-              ))}
-            </select>
+          <div style={styles.controlOptions}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <label>{t.players}:</label>
+              <select 
+                value={playerCount} 
+                onChange={(e) => setPlayerCount(Number(e.target.value))}
+                style={{
+                  ...styles.languageSelect,
+                  width: isMobile ? '100%' : 'auto'
+                }}
+                disabled={gameRunning}
+              >
+                {[1, 2, 3, 5, 10, 20].map(count => (
+                  <option key={count} value={count}>{count}</option>
+                ))}
+              </select>
+            </div>
             
-            <label style={{ marginLeft: '1rem' }}>{t.speed}:</label>
-            <select 
-              value={drawInterval} 
-              onChange={(e) => setDrawInterval(Number(e.target.value))}
-              style={styles.languageSelect}
-              disabled={gameRunning}
-            >
-              <option value={1000}>{t.fast}</option>
-              <option value={3000}>{t.normal}</option>
-              <option value={5000}>{t.slow}</option>
-            </select>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              marginLeft: isMobile ? '0' : '1rem' 
+            }}>
+              <label>{t.speed}:</label>
+              <select 
+                value={drawInterval} 
+                onChange={(e) => setDrawInterval(Number(e.target.value))}
+                style={{
+                  ...styles.languageSelect,
+                  width: isMobile ? '100%' : 'auto'
+                }}
+                disabled={gameRunning}
+              >
+                <option value={1000}>{t.fast}</option>
+                <option value={3000}>{t.normal}</option>
+                <option value={5000}>{t.slow}</option>
+              </select>
+            </div>
           </div>
         </div>
 
         {/* Game status */}
         <div style={styles.gameStatusCard}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: isMobile ? 'column' : 'row',
+            justifyContent: 'space-between', 
+            alignItems: isMobile ? 'center' : 'flex-start',
+            gap: isMobile ? '1rem' : '0'
+          }}>
             <div>
               <h2 style={{ 
-                fontSize: '1.5rem', 
+                fontSize: isMobile ? '1.25rem' : '1.5rem', 
                 fontWeight: 'bold', 
                 marginBottom: '0.5rem',
-                color: colors.primary
+                color: colors.primary,
+                textAlign: isMobile ? 'center' : 'left'
               }}>
                 {!gameRunning && drawnNumbers.length === 0 && t.welcome}
                 {!gameRunning && drawnNumbers.length > 0 && t.gamePaused}
                 {gameRunning && t.drawingInProgress}
               </h2>
-              <p style={{ fontSize: '1.125rem' }}>
+              <p style={{ 
+                fontSize: isMobile ? '1rem' : '1.125rem',
+                textAlign: isMobile ? 'center' : 'left'
+              }}>
                 {gameRunning 
                   ? `${t.numbersDrawn}: ${drawnNumbers.length}/75` 
                   : t.clickToStart}
               </p>
-              <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: theme === 'light' ? '#6B7280' : '#9CA3AF' }}>
+              <p style={{ 
+                marginTop: '0.5rem', 
+                fontSize: '0.875rem', 
+                color: theme === 'light' ? '#6B7280' : '#9CA3AF',
+                textAlign: isMobile ? 'center' : 'left'
+              }}>
                 {t.autoMarkInfo}
               </p>
             </div>
@@ -854,12 +932,28 @@ const BingoGame = () => {
           )}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: '1.5rem' 
+        }}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: isMobile ? 'column' : 'row',
+            flexWrap: 'wrap', 
+            gap: isMobile ? '1rem' : '2rem' 
+          }}>
             {/* Player's card */}
-            <div style={{ flex: '1', minWidth: '300px' }}>
+            <div style={{ 
+              flex: '1', 
+              minWidth: isMobile ? '100%' : '300px' 
+            }}>
               <div style={styles.card}>
-                <h2 style={styles.cardHeader}>{t.yourCard}</h2>
+                <h2 style={{
+                  ...styles.cardHeader,
+                  textAlign: isMobile ? 'center' : 'left',
+                  justifyContent: isMobile ? 'center' : 'flex-start'
+                }}>{t.yourCard}</h2>
                 <div style={styles.bingoCard}>
                   {/* BINGO header */}
                   {['B', 'I', 'N', 'G', 'O'].map(letter => (
@@ -893,12 +987,29 @@ const BingoGame = () => {
             </div>
 
             {/* Drawn numbers */}
-            <div style={{ flex: '1', minWidth: '300px' }}>
+            <div style={{ 
+              flex: '1', 
+              minWidth: isMobile ? '100%' : '300px' 
+            }}>
               <div style={styles.card}>
-                <h2 style={styles.cardHeader}>{t.drawnNumbers}</h2>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', padding: '0.5rem' }}>
+                <h2 style={{
+                  ...styles.cardHeader,
+                  textAlign: isMobile ? 'center' : 'left',
+                  justifyContent: isMobile ? 'center' : 'flex-start'
+                }}>{t.drawnNumbers}</h2>
+                <div style={{ 
+                  display: 'flex', 
+                  flexWrap: 'wrap', 
+                  gap: isMobile ? '0.25rem' : '0.5rem', 
+                  padding: isMobile ? '0.25rem' : '0.5rem',
+                  justifyContent: isMobile ? 'center' : 'flex-start'
+                }}>
                   {drawnNumbers.length === 0 ? (
-                    <p style={{ color: theme === 'light' ? '#6B7280' : '#9CA3AF' }}>{t.noNumbersDrawn}</p>
+                    <p style={{ 
+                      color: theme === 'light' ? '#6B7280' : '#9CA3AF',
+                      textAlign: 'center',
+                      width: '100%'
+                    }}>{t.noNumbersDrawn}</p>
                   ) : (
                     drawnNumbers
                       .slice()
@@ -923,11 +1034,19 @@ const BingoGame = () => {
 
           {/* Other players */}
           <div style={styles.card}>
-            <h2 style={styles.cardHeader}>{t.otherPlayers}</h2>
+            <h2 style={{
+              ...styles.cardHeader,
+              textAlign: isMobile ? 'center' : 'left',
+              justifyContent: isMobile ? 'center' : 'flex-start'
+            }}>{t.otherPlayers}</h2>
             <div style={{ 
               display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
-              gap: '1rem' 
+              gridTemplateColumns: isMobile 
+                ? isSmallScreen 
+                  ? 'repeat(auto-fill, minmax(140px, 1fr))' 
+                  : 'repeat(auto-fill, minmax(180px, 1fr))' 
+                : 'repeat(auto-fill, minmax(280px, 1fr))', 
+              gap: isMobile ? '0.5rem' : '1rem' 
             }}>
               {allCards.map(player => (
                 <div 
@@ -937,10 +1056,20 @@ const BingoGame = () => {
                     ...(winners.includes(player.id) ? styles.playerWinner : {})
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <h3 style={{ fontWeight: 'bold', fontSize: '1rem' }}>{player.name}</h3>
-                    <span style={{ fontSize: '0.875rem' }}>
-                      {player.marked.length - 1} / 75 {t.numbersMarked}
+                  <div style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
+                    alignItems: 'center', 
+                    marginBottom: '0.5rem' 
+                  }}>
+                    <h3 style={{ 
+                      fontWeight: 'bold', 
+                      fontSize: isMobile ? '0.875rem' : '1rem' 
+                    }}>{player.name}</h3>
+                    <span style={{ 
+                      fontSize: isMobile ? '0.75rem' : '0.875rem' 
+                    }}>
+                      {player.marked.length - 1} / 75 {isMobile ? '' : t.numbersMarked}
                     </span>
                   </div>
                   <div style={styles.progressBar}>
